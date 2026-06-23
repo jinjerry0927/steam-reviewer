@@ -13,33 +13,34 @@
 > 목표: `steam-reviewer analyze "Hades"` → 긍부정·플레이타임 통계가 텍스트로 출력
 
 ### 안전 바닥
-- [ ] `.gitignore` 생성 (`.env`, `__pycache__/`, `.cache/`, 빌드 산출물)
-- [ ] `.env.example` 생성 (`GEMINI_API_KEY=` 양식만, v0.3용)
+- [x] `.gitignore` 생성 (`.env`, `__pycache__/`, `.cache/`, 빌드 산출물)
+- [x] `.env.example` 생성 (`GEMINI_API_KEY=` 양식만, v0.3용)
 
 ### 패키지 골격
-- [ ] `pyproject.toml` (배포명 `steam-reviewer`, import `steam_reviewer`, deps: requests/typer/pandas)
-- [ ] `steam_reviewer/__init__.py` + 버전
-- [ ] 폴더 골격 (`loaders/`, `analyzers/`, `ai/`, `report/`)
+- [x] `pyproject.toml` (배포명 `steam-reviewer`, import `steam_reviewer`, deps: requests/typer/pandas, hatchling)
+- [x] `steam_reviewer/__init__.py` + 버전(0.1.0) + 공개 API export
+- [x] 폴더 골격 (`loaders/`, `analyzers/`, `ai/`, `report/`)
 
 ### 리뷰 수집 (Loaders)
-- [ ] `loaders/steam.py` — `resolve_appid(name)` (store search API, 키 불필요)
-- [ ] `loaders/steam.py` — `fetch_reviews(appid, max_count, language, filter)` 커서 페이지네이션
-- [ ] `loaders/steam.py` — 리뷰 응답 → 표준 dict/DataFrame (text/voted_up/playtime/votes_up/timestamp)
-- [ ] 레이트리밋 매너 (요청 간 간격) + 에러/빈결과 처리
+- [x] `loaders/steam.py` — `resolve_appid(name)` (store search API, 키 불필요, 숫자면 App ID 바로 사용)
+- [x] `loaders/steam.py` — `fetch_reviews(appid, max_count, language, filter)` 커서 페이지네이션 (커서 중복 시 종료)
+- [x] `loaders/steam.py` — `reviews_dataframe()` 표준 변환 (작성자 steamid 제외, playtime만 추출)
+- [x] 레이트리밋 매너 (요청 간 `delay`) + 에러/빈결과 처리 (`SteamAPIError`)
 
 ### 기본 분석 (Analyzers)
-- [ ] `analyzers/basic.py` — 긍/부정 비율, 리뷰 수, 언어 분포
-- [ ] `analyzers/basic.py` — 평균/중앙 플레이타임, 추천자 vs 비추천자 플레이타임 비교
-- [ ] `analyzers/basic.py` — 도움됨(votes_up) 상위 리뷰 식별
+- [x] `analyzers/basic.py` — 긍/부정 비율, 리뷰 수, 언어 분포
+- [x] `analyzers/basic.py` — 평균/중앙 플레이타임, 추천자 vs 비추천자 비교
+- [x] `analyzers/basic.py` — 도움됨(votes_up) 상위 리뷰 식별 + Steam 전체 요약 패스스루
 
 ### 출력 + 마무리
-- [ ] `report/text.py` — 분석 결과를 보기 좋은 텍스트로
-- [ ] `cli.py` — `steam-reviewer analyze <이름|appid>` → 텍스트 리포트
-- [ ] `tests/test_basic.py` — 분석 핵심 동작 (수집은 mock)
-- [ ] `README.md` 초안 (소개/설치/사용/면책·매너 문구)
-- [ ] `LICENSE` (MIT)
-- [ ] **git init + 첫 커밋** (`.env` 미포함 확인)
-- [ ] **v0.1 동작 확인**: 실제 게임 1개로 수집→통계 출력 검증
+- [x] `report/text.py` — 분석 결과를 보기 좋은 텍스트로 (면책 문구 포함)
+- [x] `cli.py` — `steam-reviewer analyze <이름|appid>` → 텍스트 리포트
+  - ⚠️ 메모: ① 단일 명령이면 typer가 서브커맨드명을 생략시켜 `@app.callback()`로 그룹 고정. ② Windows cp949 콘솔이 이모지 출력 시 크래시 → CLI 시작 시 stdout/stderr `reconfigure(utf-8, errors=replace)`.
+- [x] `tests/test_basic.py` — 분석 핵심 동작 8개 (수집은 mock)
+- [x] `README.md` 초안 (소개/설치/사용/면책·매너 문구)
+- [x] `LICENSE` (MIT)
+- [x] **git init + 첫 커밋** (`.env` 미포함 확인) — 커밋 `85c0d71`
+- [x] **v0.1 동작 확인**: `steam-reviewer analyze "Hades" -n 60` 실데이터 수집→통계 출력 검증 완료 (Hades II, 긍정 92%)
 
 ---
 
