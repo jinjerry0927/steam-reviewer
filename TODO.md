@@ -52,18 +52,18 @@
 - [x] 캐시 만료/강제갱신(`--refresh`) 옵션 — `cached_at` 기반 TTL(기본 24h, 0이면 무제한), CLI `--refresh`/`--no-cache`/`--cache-ttl`. `tests/test_cache.py` 7개 통과.
 
 ### 분석 심화
-- [ ] `analyzers/keywords.py` — 긍/부정 리뷰별 빈출 키워드 (불용어 제거)
-- [ ] `analyzers/trends.py` — 작성일별 리뷰 수·감성 추세 (패치 전후 변화)
-- [ ] 리뷰 길이/도움됨 분포 통계
+- [x] `analyzers/keywords.py` — 긍/부정 리뷰별 빈출 키워드 (라틴 토큰·불용어 제거, `analyze_keywords`). 비라틴 스크립트는 `-l english` 권장.
+- [x] `analyzers/trends.py` — 작성일별 리뷰 수·긍정 비율 추세 (`analyze_trends`, day/week/month 리샘플 + first/last/direction).
+- [x] 리뷰 길이/도움됨 분포 통계 — `analyzers/distributions.py` (`analyze_distributions`, 길이 평균/중앙/최소/최대 + votes_up 구간 버킷).
 
 ### 차트
-- [ ] `report/charts.py` — 긍부정 추세 라인, 키워드 막대, 플레이타임 분포 (matplotlib, 선택 의존성)
-- [ ] 차트 PNG 저장 + CLI `--charts DIR`
+- [x] `report/charts.py` — 감성 추세 라인 + 긍/부정 키워드 막대 + 플레이타임 분포 (matplotlib 선택 의존성, Agg 백엔드, 라벨은 폰트 안전하게 영어).
+- [x] 차트 PNG 저장 + CLI `--charts DIR` (+ `--trend` 단위 옵션). matplotlib 없으면 `ChartsUnavailable` 안내 후 코어는 정상.
 
 ### 마무리
-- [ ] `tests/test_keywords.py`, `tests/test_trends.py`
-- [ ] README에 분석 예시·차트 추가
-- [ ] **v0.2 동작 확인**
+- [x] `tests/test_keywords.py`, `tests/test_trends.py` (+ `test_distributions.py`, `test_charts.py`). 전체 30개 통과.
+- [x] README에 분석 예시·차트·옵션 추가.
+- [x] **v0.2 동작 확인**: `analyze "Hades" -n 80 -l english --charts …` 실데이터로 키워드/추세/분포/캐시 적중/PNG 3종 생성 검증. 버전 0.2.0.
 
 ---
 

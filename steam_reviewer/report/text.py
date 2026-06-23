@@ -55,6 +55,44 @@ def render_text(stats: dict[str, Any], *, game_name: str, appid: int) -> str:
         lang_str = ", ".join(f"{k} {v}" for k, v in langs.items())
         lines.append(f"🌐 언어 분포(상위): {lang_str}")
 
+    dist = stats.get("distributions")
+    if dist and not dist.get("empty"):
+        length = dist.get("length")
+        votes = dist.get("votes_up")
+        if length:
+            lines.append("")
+            lines.append(
+                f"📝 리뷰 길이(문자): 평균 {length['mean']} · 중앙값 {length['median']} "
+                f"(최소 {length['min']} / 최대 {length['max']})"
+            )
+        if votes:
+            bucket_str = ", ".join(f"{b['range']}:{b['count']}" for b in votes.get("buckets", []))
+            lines.append(f"👍 도움됨(votes_up) 분포: {bucket_str}  · 중앙값 {votes['median']} / 최대 {votes['max']}")
+
+    kw = stats.get("keywords")
+    if kw and not kw.get("empty"):
+        pos_kw = kw.get("positive") or []
+        neg_kw = kw.get("negative") or []
+        if pos_kw or neg_kw:
+            lines.append("")
+            lines.append("🔑 빈출 키워드 (라틴 문자 기준)")
+            if pos_kw:
+                lines.append("  👍 " + ", ".join(f"{k['word']}({k['count']})" for k in pos_kw[:10]))
+            if neg_kw:
+                lines.append("  👎 " + ", ".join(f"{k['word']}({k['count']})" for k in neg_kw[:10]))
+
+    trends = stats.get("trends")
+    if trends and not trends.get("empty") and trends.get("points"):
+        pts = trends["points"]
+        lines.append("")
+        first, last = pts[0], pts[-1]
+        arrow = {"up": "📈 상승", "down": "📉 하락", "flat": "➡️ 보합"}.get(trends.get("direction"), "")
+        lines.append(
+            f"📅 감성 추세({trends.get('freq')}): "
+            f"{first['date']} 긍정 {first['positive_ratio'] * 100:.0f}% "
+            f"→ {last['date']} 긍정 {last['positive_ratio'] * 100:.0f}%  {arrow}"
+        )
+
     top = stats.get("top_helpful")
     if top:
         lines.append("")

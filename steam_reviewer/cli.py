@@ -14,6 +14,9 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 from .analyzers.basic import analyze_basic
+from .analyzers.distributions import analyze_distributions
+from .analyzers.keywords import analyze_keywords
+from .analyzers.trends import analyze_trends
 from .cache import ReviewCache, fetch_reviews_cached
 from .loaders.steam import SteamAPIError, resolve_appid, reviews_dataframe
 from .report.text import render_text
@@ -35,6 +38,8 @@ def analyze(
     refresh: bool = typer.Option(False, "--refresh", help="캐시를 무시하고 새로 수집"),
     no_cache: bool = typer.Option(False, "--no-cache", help="로컬 캐시를 쓰지도 만들지도 않음"),
     cache_ttl: float = typer.Option(24.0, "--cache-ttl", help="캐시 유효 시간(시간). 0이면 만료 없음"),
+    trend_freq: str = typer.Option("week", "--trend", help='감성 추세 단위 ("day" | "week" | "month")'),
+    charts_dir: str = typer.Option(None, "--charts", help="차트 PNG를 저장할 디렉터리 (matplotlib 필요)"),
 ) -> None:
     """게임의 Steam 리뷰를 분석해 텍스트 리포트를 출력합니다."""
     try:
@@ -72,8 +77,26 @@ def analyze(
 
     df = reviews_dataframe(batch)
     stats = analyze_basic(df, query_summary=batch.query_summary)
+    keywords = analyze_keywords(df)
+    trends = analyze_trends(df, freq=trend_freq)
+    stats["keywords"] = keywords
+    stats["trends"] = trends
+    stats["distributions"] = analyze_distributions(df)
     typer.echo("")
     typer.echo(render_text(stats, game_name=name, appid=appid))
+
+    if charts_dir:
+        from .report.charts import ChartsUnavailable, save_charts
+
+        try:
+            saved = save_charts(df, out_dir=charts_dir, trends=trends, keywords=keywords, game_name=name)
+        except ChartsUnavailable as exc:
+            typer.secho(f"⚠️  {exc}", fg=typer.colors.YELLOW)
+        else:
+            typer.echo("")
+            typer.secho(f"📊 차트 {len(saved)}개 저장: {charts_dir}", fg=typer.colors.CYAN)
+            for p in saved:
+                typer.echo(f"   - {p}")
 
 
 def main() -> None:  # 콘솔 스크립트 진입점 대체용
