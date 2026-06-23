@@ -4,6 +4,7 @@ __version__ = "0.1.0"
 
 from .loaders.steam import resolve_appid, fetch_reviews, reviews_dataframe
 from .analyzers.basic import analyze_basic
+from .cache import ReviewCache, fetch_reviews_cached
 
 __all__ = [
     "__version__",
@@ -11,4 +12,6 @@ __all__ = [
     "fetch_reviews",
     "reviews_dataframe",
     "analyze_basic",
+    "ReviewCache",
+    "fetch_reviews_cached",
 ]

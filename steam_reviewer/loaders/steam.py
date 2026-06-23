@@ -143,6 +143,22 @@ _SAFE_FIELDS = {
 }
 
 
+def sanitize_review(r: dict[str, Any]) -> dict[str, Any]:
+    """저장·캐시용으로 작성자 식별자를 제거한 안전 리뷰 dict를 만든다.
+
+    원본 응답의 ``author.steamid`` 등은 버리고, 분석에 필요한 안전 필드와
+    플레이타임만 남긴다. 결과는 ``reviews_dataframe``이 그대로 처리할 수 있다.
+    """
+    row: dict[str, Any] = {src: r.get(src) for src in _SAFE_FIELDS}
+    author = r.get("author") or {}
+    row["author"] = {
+        "playtime_forever": author.get("playtime_forever"),
+        "playtime_at_review": author.get("playtime_at_review"),
+        "num_games_owned": author.get("num_games_owned"),
+    }
+    return row
+
+
 def reviews_dataframe(batch: ReviewBatch | list[dict[str, Any]]):
     """ReviewBatch(또는 리뷰 리스트)를 pandas DataFrame으로 변환한다.
 

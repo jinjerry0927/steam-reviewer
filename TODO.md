@@ -48,8 +48,8 @@
 > 목표: "왜 좋아하고 싫어하는지" 키워드와 추세로 드러내기
 
 ### 캐싱
-- [ ] `cache.py` — 수집한 리뷰 로컬 JSON 캐시 (재실행 시 재요청 안 함)
-- [ ] 캐시 만료/강제갱신(`--refresh`) 옵션
+- [x] `cache.py` — 수집한 리뷰 로컬 JSON 캐시 (재실행 시 재요청 안 함). `ReviewCache`(appid·언어·필터·구매유형·개수 조합별 키) + `fetch_reviews_cached`. **개인정보 비저장**: `sanitize_review`로 steamid 등 작성자 식별자 제거 후 안전 필드만 저장(상시 원칙 #2).
+- [x] 캐시 만료/강제갱신(`--refresh`) 옵션 — `cached_at` 기반 TTL(기본 24h, 0이면 무제한), CLI `--refresh`/`--no-cache`/`--cache-ttl`. `tests/test_cache.py` 7개 통과.
 
 ### 분석 심화
 - [ ] `analyzers/keywords.py` — 긍/부정 리뷰별 빈출 키워드 (불용어 제거)

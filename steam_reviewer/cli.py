@@ -14,7 +14,8 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 from .analyzers.basic import analyze_basic
-from .loaders.steam import SteamAPIError, fetch_reviews, resolve_appid, reviews_dataframe
+from .cache import ReviewCache, fetch_reviews_cached
+from .loaders.steam import SteamAPIError, resolve_appid, reviews_dataframe
 from .report.text import render_text
 
 app = typer.Typer(add_completion=False, help="Steam 리뷰를 수집·분석해 리포트를 생성합니다.")
@@ -31,6 +32,9 @@ def analyze(
     max_count: int = typer.Option(500, "--max", "-n", help="수집할 최대 리뷰 수"),
     language: str = typer.Option("all", "--language", "-l", help='리뷰 언어 ("all", "english", "koreana" 등)'),
     review_filter: str = typer.Option("recent", "--filter", "-f", help='정렬 ("recent" | "updated" | "all")'),
+    refresh: bool = typer.Option(False, "--refresh", help="캐시를 무시하고 새로 수집"),
+    no_cache: bool = typer.Option(False, "--no-cache", help="로컬 캐시를 쓰지도 만들지도 않음"),
+    cache_ttl: float = typer.Option(24.0, "--cache-ttl", help="캐시 유효 시간(시간). 0이면 만료 없음"),
 ) -> None:
     """게임의 Steam 리뷰를 분석해 텍스트 리포트를 출력합니다."""
     try:
@@ -41,10 +45,26 @@ def analyze(
 
     typer.secho(f"⏳ '{name}' (App {appid}) 리뷰 수집 중… (최대 {max_count:,}개)", fg=typer.colors.CYAN)
     try:
-        batch = fetch_reviews(appid, max_count=max_count, language=language, review_filter=review_filter)
+        if no_cache:
+            from .loaders.steam import fetch_reviews
+
+            batch = fetch_reviews(appid, max_count=max_count, language=language, review_filter=review_filter)
+            from_cache = False
+        else:
+            batch, from_cache = fetch_reviews_cached(
+                appid,
+                max_count=max_count,
+                language=language,
+                review_filter=review_filter,
+                cache=ReviewCache(ttl_hours=cache_ttl),
+                refresh=refresh,
+            )
     except SteamAPIError as exc:
         typer.secho(f"❌ {exc}", fg=typer.colors.RED)
         raise typer.Exit(1)
+
+    if from_cache:
+        typer.secho("💾 로컬 캐시에서 불러왔습니다 (--refresh 로 새로 수집).", fg=typer.colors.GREEN)
 
     if len(batch) == 0:
         typer.secho("수집된 리뷰가 없습니다. 언어/필터 옵션을 바꿔보세요.", fg=typer.colors.YELLOW)
