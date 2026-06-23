@@ -1,0 +1,29 @@
+# 환경/비밀 (절대 커밋 금지)
+.env
+*.key
+
+# 로컬 캐시
+.cache/
+*.cache
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 생성 산출물
+reports/
+*.png
+!docs/images/*.png
