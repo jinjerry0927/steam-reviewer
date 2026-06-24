@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "steam-reviewer"
-version = "0.2.0"
+version = "0.3.0"
 description = "게임 이름만 넣으면 Steam 리뷰 수천 개를 분석해 통계 + AI 요약 리포트를 뽑아주는 도구"
 readme = "README.md"
 requires-python = ">=3.10"

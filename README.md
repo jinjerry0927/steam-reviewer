@@ -21,6 +21,7 @@ steam-reviewer analyze "Hades"            # 이름으로
 steam-reviewer analyze 1145360            # App ID로
 steam-reviewer analyze "Elden Ring" -n 1000 -l english
 steam-reviewer analyze "Hades" -l english --charts ./charts   # 차트 PNG까지
+steam-reviewer analyze "Hades" -l english --ai               # AI 측면별 요약 (키 필요)
 ```
 
 옵션:
@@ -29,7 +30,20 @@ steam-reviewer analyze "Hades" -l english --charts ./charts   # 차트 PNG까지
 - `--filter, -f` 정렬 (`recent` | `updated` | `all`)
 - `--trend` 감성 추세 단위 (`day` | `week` | `month`, 기본 `week`)
 - `--charts DIR` 추세·키워드·플레이타임 차트 PNG를 `DIR`에 저장 (matplotlib 필요)
+- `--ai` 측면별(게임성/성능/스토리/가격/조작) 칭찬·불만 AI 요약 (`--ai-model` 로 모델 지정)
 - `--refresh` 캐시를 무시하고 새로 수집 / `--no-cache` 캐시 미사용 / `--cache-ttl H` 캐시 유효시간(시간)
+
+### AI 요약 (선택, v0.3+)
+
+`--ai` 는 측면별 칭찬·불만을 Gemini로 요약합니다. **기본은 꺼져 있고**, 키가 없으면 통계만 출력합니다(요약은 건너뜀).
+
+```bash
+pip install "steam-reviewer[ai]"
+echo "GEMINI_API_KEY=발급받은_키" > .env     # 또는 환경변수로 export
+steam-reviewer analyze "Hades" -l english --ai
+```
+
+> AI 요약은 "구매 추천 금지, 제공된 리뷰 근거 기반 요약만" 가드레일 아래 동작하며, 출력은 추천이 아니라 평가 경향 진단입니다. 키는 `.env`(깃 제외)에만 둡니다.
 
 ### 출력 예시 (`analyze "Hades" -l english`)
 
@@ -84,7 +98,7 @@ print(analyze_trends(df, freq="week")["direction"])  # up | down | flat
 
 - [x] v0.1 — 리뷰 수집 + 기본 통계 + 텍스트 리포트
 - [x] v0.2 — 키워드 + 시간 추세 + 분포 + 차트 + 캐싱
-- [ ] v0.3 — AI 측면별 요약 (Gemini)
+- [x] v0.3 — AI 측면별 요약 (Gemini, 키 없으면 통계만)
 - [ ] v0.4 — App 상세 + HTML 리포트
 - [ ] v1.0 — PyPI 배포
 

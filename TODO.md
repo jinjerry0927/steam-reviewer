@@ -70,15 +70,15 @@
 ## 🟠 v0.3 — AI 측면별 요약 (AI ✅)
 > 목표: 수천 리뷰 → 측면별 칭찬·불만 자연어 요약
 
-- [ ] `google-genai` 선택 의존성(`[ai]`) + `.env` `GEMINI_API_KEY`
-- [ ] `ai/summarize.py` — 리뷰 샘플링·집계 → 프롬프트 구성 (토큰 한도 고려)
-- [ ] `ai/summarize.py` — 측면별(게임성/성능/스토리/가격/조작) 칭찬·불만 요약
-- [ ] 프롬프트 가드레일: "추천 금지, 리뷰 근거 기반 요약만"
-- [ ] 키 없으면 통계만 (fallback), 기본값 = AI 끔
-- [ ] `cli.py --ai` 옵션
-- [ ] `tests/test_ai.py` (mock)
-- [ ] README에 AI 요약 예시
-- [ ] **v0.3 동작 확인** (키 없는 fallback 포함)
+- [x] `google-genai` 선택 의존성(`[ai]`) + `.env` `GEMINI_API_KEY` (pyproject·.env.example 이미 존재, resolve_api_key가 dotenv 지연 로드).
+- [x] `ai/summarize.py` — votes_up 순 긍/부정 균형 샘플링 + 리뷰당/총량 글자 상한(토큰 한도 보호) → `build_prompt`.
+- [x] `ai/summarize.py` — 측면별(게임성/성능/스토리/가격/조작) 칭찬·불만 요약 (`summarize_reviews`, `generate` 주입 가능).
+- [x] 프롬프트 가드레일: "구매 추천/비추천 금지, 제공된 리뷰 근거만, 창작 금지" 명시.
+- [x] 키 없으면 통계만 (fallback), 기본값 = AI 끔 — `--ai` 기본 False, `AISummaryUnavailable` 시 경고 후 통계 유지.
+- [x] `cli.py --ai` 옵션 (+ `--ai-model`).
+- [x] `tests/test_ai.py` (mock) — generate 주입/가드레일/키없음/빈리뷰/표본상한 7개.
+- [x] README에 AI 요약 예시·설치·가드레일.
+- [x] **v0.3 동작 확인** (키 없는 fallback): `GEMINI_API_KEY="" analyze … --ai` → 통계 정상 출력 후 안내, 크래시 없음. 전체 37개 테스트 통과. 버전 0.3.0.
 
 ---
 

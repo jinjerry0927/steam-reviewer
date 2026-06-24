@@ -40,6 +40,8 @@ def analyze(
     cache_ttl: float = typer.Option(24.0, "--cache-ttl", help="캐시 유효 시간(시간). 0이면 만료 없음"),
     trend_freq: str = typer.Option("week", "--trend", help='감성 추세 단위 ("day" | "week" | "month")'),
     charts_dir: str = typer.Option(None, "--charts", help="차트 PNG를 저장할 디렉터리 (matplotlib 필요)"),
+    ai: bool = typer.Option(False, "--ai", help="측면별 칭찬·불만 AI 요약 (GEMINI_API_KEY 필요)"),
+    ai_model: str = typer.Option("gemini-2.0-flash", "--ai-model", help="Gemini 모델명"),
 ) -> None:
     """게임의 Steam 리뷰를 분석해 텍스트 리포트를 출력합니다."""
     try:
@@ -84,6 +86,23 @@ def analyze(
     stats["distributions"] = analyze_distributions(df)
     typer.echo("")
     typer.echo(render_text(stats, game_name=name, appid=appid))
+
+    if ai:
+        from .ai.summarize import AISummaryUnavailable, summarize_reviews
+
+        typer.secho("\n🤖 AI 측면별 요약 생성 중…", fg=typer.colors.CYAN)
+        try:
+            result = summarize_reviews(df, game_name=name, model=ai_model)
+        except AISummaryUnavailable as exc:
+            typer.secho(f"⚠️  AI 요약 생략(통계만): {exc}", fg=typer.colors.YELLOW)
+        except Exception as exc:  # API 오류 등 — 통계 출력은 유지
+            typer.secho(f"⚠️  AI 요약 실패(통계만): {exc}", fg=typer.colors.YELLOW)
+        else:
+            ss = result["sample_size"]
+            typer.echo("")
+            typer.secho(f"🤖 AI 요약 ({result['model']} · 표본 👍{ss['positive']}/👎{ss['negative']})", fg=typer.colors.MAGENTA)
+            typer.echo(result["summary"])
+            typer.echo("\nℹ️  AI 요약은 리뷰 표본 기반 추정이며 구매 추천이 아닙니다.")
 
     if charts_dir:
         from .report.charts import ChartsUnavailable, save_charts
