@@ -115,7 +115,7 @@ print(analyze_trends(df, freq="week")["direction"])  # up | down | flat
 - [x] v0.2 — 키워드 + 시간 추세 + 분포 + 차트 + 캐싱
 - [x] v0.3 — AI 측면별 요약 (Gemini, 키 없으면 통계만)
 - [x] v0.4 — App 상세 + 자기완결 HTML 리포트 (차트 인라인)
-- [ ] v1.0 — PyPI 배포
+- [x] v1.0 — PyPI 배포 (`pip install steam-reviewer`)
 
 자세한 진행: [TODO.md](TODO.md) · 기획: [docs/기획서.md](docs/기획서.md)
 

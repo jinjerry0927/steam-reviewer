@@ -107,10 +107,10 @@
 - [x] README 완성 (배지, 데모, 면책·매너) — CI/PyPI/Python/License 배지 + 출력·차트·HTML·AI 예시 + 면책·매너 포함.
 - [x] `CONTRIBUTING.md` + 이슈/PR 템플릿 (.github/ISSUE_TEMPLATE/, pull_request_template.md).
 - [x] GitHub Actions CI (pytest 매트릭스 3.10–3.13, `.[charts,ai,dev]` 설치) — `.github/workflows/ci.yml`. ⚠️ push 후 실제 실행.
-- [ ] 🛑 TestPyPI 업로드 (사용자 확인 후) — 방법 안내 완료, 계정·토큰 보유. 실행은 사용자.
-- [ ] 🛑 **PyPI 정식 배포** (사용자 확인 후) — 배포 전 버전 1.0.0 으로 올리기.
-- [ ] 🛑 GitHub 릴리스 v1.0 태그 (사용자 확인 후)
-- [ ] ⏸️ **첫 git push** (`master`→`main` 권장) — 사용자 확인 대기 중.
+- [x] 🛑 TestPyPI 업로드 (사용자 확인 후) — 업로드 + 격리 venv 설치·CLI 실행 검증 통과.
+- [x] 🛑 **PyPI 정식 배포** (사용자 확인 후) — https://pypi.org/project/steam-reviewer/1.0.0/ . `pip install steam-reviewer` 실제 설치 확인.
+- [x] 🛑 GitHub 릴리스 v1.0 태그 — `v1.0.0` 태그 push 완료(→ `55fe2de`). (웹에서 Release 노트는 선택.)
+- [x] ✅ **첫 git push** — `master`→`main` 리네임 후 push, CI(3.10–3.13) 초록.
 
 > 🛑 **STOP — 루프 정지선**: v1.0의 외부 공개 항목(🛑)은 자동 진행하지 않고 사용자 확인을 받는다.
 
