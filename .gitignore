@@ -17,11 +17,12 @@ dist/
 .venv/
 venv/
 
-# OS / 에디터
+# OS / 에디터 / 로컬 도구
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+.claude/
 
 # 생성 산출물
 reports/

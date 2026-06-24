@@ -16,12 +16,23 @@ STORE_SEARCH_URL = "https://store.steampowered.com/api/storesearch/"
 APPREVIEWS_URL = "https://store.steampowered.com/appreviews/{appid}"
 APPDETAILS_URL = "https://store.steampowered.com/api/appdetails"
 
-_DEFAULT_HEADERS = {"User-Agent": "steam-reviewer/0.1 (+https://github.com/jinjerry0927/steam-reviewer)"}
+_DEFAULT_HEADERS = {"User-Agent": "steam-reviewer (+https://github.com/jinjerry0927/steam-reviewer)"}
 _TIMEOUT = 15
 
 
 class SteamAPIError(RuntimeError):
     """Steam API 호출 실패."""
+
+
+def _as_appid(appid: int | str) -> int:
+    """App ID를 정수로 강제한다. URL 경로 삽입 전 호출해 경로 조작(SSRF류)을 차단한다."""
+    try:
+        value = int(str(appid).strip())
+    except (TypeError, ValueError):
+        raise SteamAPIError(f"잘못된 App ID: {appid!r} (정수여야 합니다).") from None
+    if value <= 0:
+        raise SteamAPIError(f"잘못된 App ID: {appid!r} (양의 정수여야 합니다).")
+    return value
 
 
 @dataclass
@@ -68,6 +79,7 @@ def fetch_appdetails(appid: int, *, country: str = "us", language: str = "englis
         short_description, developers(list[str]), release_date.
         실패/미공개 앱이면 SteamAPIError.
     """
+    appid = _as_appid(appid)
     params = {"appids": appid, "cc": country, "l": language}
     try:
         resp = requests.get(APPDETAILS_URL, params=params, headers=_DEFAULT_HEADERS, timeout=_TIMEOUT)
@@ -121,6 +133,7 @@ def fetch_reviews(
         delay: 요청 간 대기(초). 레이트리밋 매너.
         session: 재사용할 requests 세션(선택).
     """
+    appid = _as_appid(appid)
     sess = session or requests.Session()
     sess.headers.update(_DEFAULT_HEADERS)
 

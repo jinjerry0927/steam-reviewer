@@ -42,6 +42,18 @@ def test_resolve_appid_digit_shortcut():
     assert appid == 1145360
 
 
+def test_as_appid_rejects_path_injection():
+    import pytest
+
+    from steam_reviewer.loaders.steam import SteamAPIError, _as_appid
+
+    assert _as_appid("123") == 123
+    assert _as_appid(456) == 456
+    for bad in ("123/../../evil", "abc", "", "-5", "0"):
+        with pytest.raises(SteamAPIError):
+            _as_appid(bad)
+
+
 def test_reviews_dataframe_excludes_steamid():
     df = reviews_dataframe(_sample_reviews())
     assert len(df) == 3

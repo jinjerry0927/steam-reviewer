@@ -1,6 +1,6 @@
 """steam-reviewer — Steam 리뷰 수집·분석·요약 도구."""
 
-__version__ = "0.4.0"
+__version__ = "1.0.0"
 
 from .loaders.steam import resolve_appid, fetch_reviews, fetch_appdetails, reviews_dataframe
 from .analyzers.basic import analyze_basic

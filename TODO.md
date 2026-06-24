@@ -99,6 +99,8 @@
 ## 🟣 v1.0 — 배포 + 브랜딩
 > 목표: `pip install steam-reviewer`
 
+- [x] 🔒 공개 배포 전 보안 검토 (OWASP/LLM Top 10) — LLM01 프롬프트 인젝션 방어(리뷰 `<review>` 경계+가드레일), 공급망 위생(`.claude` sdist 제외), `appid` int 강제(SSRF류 차단), 출력 토큰 상한. XSS/비밀/PII/TLS는 기존에 안전 확인. 버전 1.0.0.
+
 - [x] PyPI에 `steam-reviewer` 이름 사용 가능 여부 확인 → **사용 가능**(PyPI·TestPyPI 모두 404, 선점 없음). 대체명 불필요.
 - [x] 패키지 메타데이터 (분류자/키워드/URL) — 분류자 3.13·Console·Games/Entertainment·Beta 추가, URL은 jinjerry0927 확인됨.
 - [~] 로고/브랜딩 + 태그라인 — 태그라인 초안 4종 + 로고 이미지 생성 프롬프트 제공. ⚠️ 로고 **이미지 제작은 사용자**(완성 후 docs/images 에 추가).

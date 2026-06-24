@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "steam-reviewer"
-version = "0.4.0"
+version = "1.0.0"
 description = "게임 이름만 넣으면 Steam 리뷰 수천 개를 분석해 통계 + AI 요약 리포트를 뽑아주는 도구"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -47,3 +47,7 @@ Issues = "https://github.com/jinjerry0927/steam-reviewer/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["steam_reviewer"]
+
+[tool.hatch.build.targets.sdist]
+# 배포물에서 로컬 도구·캐시·비밀 흔적 제외(공급망 위생).
+exclude = [".claude", ".cache", ".env", ".github/scheduled_tasks.lock", "build_check"]
