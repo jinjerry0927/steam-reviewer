@@ -50,4 +50,4 @@ packages = ["steam_reviewer"]
 
 [tool.hatch.build.targets.sdist]
 # 배포물에서 로컬 도구·캐시·비밀 흔적 제외(공급망 위생).
-exclude = [".claude", ".cache", ".env", ".github/scheduled_tasks.lock", "build_check"]
+exclude = [".claude", ".cache", ".env", ".github/scheduled_tasks.lock", "build_check", "docs/images"]

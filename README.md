@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jinjerry0927/steam-reviewer/main/docs/images/logo.png" width="320" alt="steam-reviewer logo">
+</p>
+
 # 🎮 steam-reviewer
 
 [![CI](https://github.com/jinjerry0927/steam-reviewer/actions/workflows/ci.yml/badge.svg)](https://github.com/jinjerry0927/steam-reviewer/actions/workflows/ci.yml)
