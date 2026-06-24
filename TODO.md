@@ -85,14 +85,14 @@
 ## 🔵 v0.4 — App 상세 + HTML 리포트 (AI ✅)
 > 목표: 헤더 이미지·장르 포함 완성형 리포트
 
-- [ ] `loaders/steam.py` — `fetch_appdetails(appid)` (게임명/장르/헤더이미지/가격)
-- [ ] `report/html.py` — 헤더 이미지 + 통계 + 차트 + AI 요약을 HTML 한 장으로
-- [ ] HTML 템플릿 디자인 (Steam 다크 테마)
-- [ ] `--html` CLI 옵션
-- [ ] 차트 인라인 임베드(자기완결 HTML)
-- [ ] `tests/test_html.py`
-- [ ] README에 HTML 리포트 예시
-- [ ] **v0.4 동작 확인**
+- [x] `loaders/steam.py` — `fetch_appdetails(appid)` (이름·장르·헤더이미지·가격·개발사·출시일, 정규화 dict).
+- [x] `report/html.py` — 헤더 이미지 + 통계 + 차트 + AI 요약을 HTML 한 장으로 (`render_html`, 표준 `html.escape`로 XSS 방지).
+- [x] HTML 템플릿 디자인 (Steam 다크 테마 — 패널/막대/키워드/카드 레이아웃).
+- [x] `--html FILE` CLI 옵션 (+ 앱상세·차트 실패해도 리포트는 생성하는 graceful 처리).
+- [x] 차트 인라인 임베드(자기완결 HTML) — `charts_as_data_uris`로 base64 data URI, `_iter_figures`로 save/embed 로직 공유.
+- [x] `tests/test_html.py` — 구조/앱상세/차트임베드/AI/XSS이스케이프/빈섹션/data-uri 8개.
+- [x] README에 HTML 리포트 예시·설명.
+- [x] **v0.4 동작 확인**: `analyze 1145350 --html` 실데이터 → 99KB 자기완결 HTML(장르·헤더이미지·차트3 인라인·6카드) 생성. 전체 44개 테스트 통과. 버전 0.4.0.
 
 ---
 

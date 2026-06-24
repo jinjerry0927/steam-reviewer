@@ -42,6 +42,7 @@ def analyze(
     charts_dir: str = typer.Option(None, "--charts", help="차트 PNG를 저장할 디렉터리 (matplotlib 필요)"),
     ai: bool = typer.Option(False, "--ai", help="측면별 칭찬·불만 AI 요약 (GEMINI_API_KEY 필요)"),
     ai_model: str = typer.Option("gemini-2.0-flash", "--ai-model", help="Gemini 모델명"),
+    html_out: str = typer.Option(None, "--html", help="자기완결 HTML 리포트를 저장할 파일 경로"),
 ) -> None:
     """게임의 Steam 리뷰를 분석해 텍스트 리포트를 출력합니다."""
     try:
@@ -87,6 +88,7 @@ def analyze(
     typer.echo("")
     typer.echo(render_text(stats, game_name=name, appid=appid))
 
+    ai_summary_text: str | None = None
     if ai:
         from .ai.summarize import AISummaryUnavailable, summarize_reviews
 
@@ -98,6 +100,7 @@ def analyze(
         except Exception as exc:  # API 오류 등 — 통계 출력은 유지
             typer.secho(f"⚠️  AI 요약 실패(통계만): {exc}", fg=typer.colors.YELLOW)
         else:
+            ai_summary_text = result["summary"]
             ss = result["sample_size"]
             typer.echo("")
             typer.secho(f"🤖 AI 요약 ({result['model']} · 표본 👍{ss['positive']}/👎{ss['negative']})", fg=typer.colors.MAGENTA)
@@ -116,6 +119,39 @@ def analyze(
             typer.secho(f"📊 차트 {len(saved)}개 저장: {charts_dir}", fg=typer.colors.CYAN)
             for p in saved:
                 typer.echo(f"   - {p}")
+
+    if html_out:
+        from pathlib import Path
+
+        from .report.charts import ChartsUnavailable, charts_as_data_uris
+        from .report.html import render_html
+
+        # 앱 상세(헤더 이미지·장르·가격) — 실패해도 리포트는 생성.
+        details = None
+        try:
+            from .loaders.steam import fetch_appdetails
+
+            details = fetch_appdetails(appid)
+        except SteamAPIError as exc:
+            typer.secho(f"⚠️  앱 상세 생략: {exc}", fg=typer.colors.YELLOW)
+
+        # 차트 인라인 임베드 — matplotlib 없으면 차트 없이 진행.
+        chart_uris: dict[str, str] = {}
+        try:
+            chart_uris = charts_as_data_uris(df, trends=trends, keywords=keywords, game_name=name)
+        except ChartsUnavailable as exc:
+            typer.secho(f"⚠️  차트 임베드 생략: {exc}", fg=typer.colors.YELLOW)
+
+        html = render_html(
+            stats, game_name=name, appid=appid,
+            appdetails=details, chart_uris=chart_uris, ai_summary=ai_summary_text,
+        )
+        out_path = Path(html_out)
+        if out_path.parent and not out_path.parent.exists():
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(html, encoding="utf-8")
+        typer.echo("")
+        typer.secho(f"📄 HTML 리포트 저장: {out_path}", fg=typer.colors.CYAN)
 
 
 def main() -> None:  # 콘솔 스크립트 진입점 대체용
