@@ -12,14 +12,18 @@ license = { text = "MIT" }
 authors = [{ name = "Jinuk James Lee", email = "jinuk.james.lee@gmail.com" }]
 keywords = ["steam", "reviews", "nlp", "sentiment", "data-analysis", "ai", "summary"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
+    "Environment :: Console",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Text Processing :: Linguistic",
+    "Topic :: Games/Entertainment",
     "Operating System :: OS Independent",
 ]
 dependencies = [

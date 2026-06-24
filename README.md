@@ -1,8 +1,13 @@
 # 🎮 steam-reviewer
 
+[![CI](https://github.com/jinjerry0927/steam-reviewer/actions/workflows/ci.yml/badge.svg)](https://github.com/jinjerry0927/steam-reviewer/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/steam-reviewer.svg)](https://pypi.org/project/steam-reviewer/)
+[![Python](https://img.shields.io/pypi/pyversions/steam-reviewer.svg)](https://pypi.org/project/steam-reviewer/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > 게임 이름만 넣으면 Steam 리뷰 수천 개를 분석해 **통계 + AI 요약 리포트**를 뽑아주는 도구
 >
-> *Read 1,000 reviews in 1 second.*
+> *Read 1,000 reviews in 1 second.* · 별점 너머의 진짜 이유를 봅니다.
 
 별점·추천%만으로는 "왜" 좋아하고 싫어하는지 알 수 없습니다. `steam-reviewer`는 공개 Steam 리뷰를 대량 수집해 긍/부정 경향, 플레이타임, 키워드, 시간 추세를 분석하고, (선택적으로) AI가 측면별 칭찬·불만을 요약합니다.
 

@@ -99,15 +99,16 @@
 ## 🟣 v1.0 — 배포 + 브랜딩
 > 목표: `pip install steam-reviewer`
 
-- [ ] PyPI에 `steam-reviewer` 이름 사용 가능 여부 확인 (불가 시 대체명)
-- [ ] 패키지 메타데이터 (분류자/키워드/URL)
-- [ ] 로고/브랜딩 + 태그라인
-- [ ] README 완성 (배지, 데모, 면책·매너)
-- [ ] `CONTRIBUTING.md` + 이슈/PR 템플릿
-- [ ] GitHub Actions CI (pytest 매트릭스)
-- [ ] 🛑 TestPyPI 업로드 (사용자 확인 후)
-- [ ] 🛑 **PyPI 정식 배포** (사용자 확인 후)
+- [x] PyPI에 `steam-reviewer` 이름 사용 가능 여부 확인 → **사용 가능**(PyPI·TestPyPI 모두 404, 선점 없음). 대체명 불필요.
+- [x] 패키지 메타데이터 (분류자/키워드/URL) — 분류자 3.13·Console·Games/Entertainment·Beta 추가, URL은 jinjerry0927 확인됨.
+- [~] 로고/브랜딩 + 태그라인 — 태그라인 초안 4종 + 로고 이미지 생성 프롬프트 제공. ⚠️ 로고 **이미지 제작은 사용자**(완성 후 docs/images 에 추가).
+- [x] README 완성 (배지, 데모, 면책·매너) — CI/PyPI/Python/License 배지 + 출력·차트·HTML·AI 예시 + 면책·매너 포함.
+- [x] `CONTRIBUTING.md` + 이슈/PR 템플릿 (.github/ISSUE_TEMPLATE/, pull_request_template.md).
+- [x] GitHub Actions CI (pytest 매트릭스 3.10–3.13, `.[charts,ai,dev]` 설치) — `.github/workflows/ci.yml`. ⚠️ push 후 실제 실행.
+- [ ] 🛑 TestPyPI 업로드 (사용자 확인 후) — 방법 안내 완료, 계정·토큰 보유. 실행은 사용자.
+- [ ] 🛑 **PyPI 정식 배포** (사용자 확인 후) — 배포 전 버전 1.0.0 으로 올리기.
 - [ ] 🛑 GitHub 릴리스 v1.0 태그 (사용자 확인 후)
+- [ ] ⏸️ **첫 git push** (`master`→`main` 권장) — 사용자 확인 대기 중.
 
 > 🛑 **STOP — 루프 정지선**: v1.0의 외부 공개 항목(🛑)은 자동 진행하지 않고 사용자 확인을 받는다.
 
